@@ -4,18 +4,14 @@ const mongoose = require('mongoose');
 const Product = model.Product;
 
 // Create
-exports.createProduct = (req, res) => {
-  const product = new Product(req.body);
-  product.save((err,doc)=>{
-    console.log({err,doc})
-    if(err){
-      res.status(400).json(err);
-    } else{
-      res.status(201).json(doc);
-    }
-  })
-
-  
+exports.createProduct = async (req, res) => {
+  try {
+      const product = new Product(req.body);
+      const savedProduct = await product.save();
+      res.status(201).send(savedProduct);
+  } catch (err) {
+      res.status(500).send(err);
+  }
 };
 
 exports.getAllProducts = async (req, res) => {
